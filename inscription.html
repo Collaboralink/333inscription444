@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande de Devis - CollaboraLink</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: auto;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            box-sizing: border-box;
+            margin: 20px;
+            position: relative;
+        }
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #9fdc9a, #7cbb6e);
+            border-radius: 12px 12px 0 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #7cbb6e, #9fdc9a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+        }
+        .header h2 {
+            font-size: 20px;
+            color: #4a7c49;
+            margin: 10px 0 0;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: #eaf4ea;
+            padding: 8px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #666;
+            font-size: 15px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d0d5de;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: #333;
+            background: #fafafa;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: #7cbb6e;
+            box-shadow: 0 0 6px rgba(124, 187, 110, 0.2);
+            outline: none;
+        }
+        .form-group .note {
+            font-size: 13px;
+            color: #777;
+            margin-top: 4px;
+        }
+        .form-group .error {
+            color: #d9534f;
+            font-size: 13px;
+        }
+        .submit-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .submit-container button {
+            background-color: #7cbb6e;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            max-width: 200px;
+            transition: background-color 0.3s, transform 0.2s;
+            font-family: 'Roboto', sans-serif;
+            text-transform: capitalize;
+        }
+        .submit-container button:hover {
+            background-color: #6da55a;
+            transform: translateY(-2px);
+        }
+        .submit-container button:active {
+            transform: translateY(1px);
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            .submit-container button {
+                font-size: 14px;
+                padding: 12px;
+            }
+        }
+
+        /* Styles pour la page de récapitulatif */
+        .summary-container {
+            display: none;
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            box-sizing: border-box;
+            margin: 20px;
+            position: relative;
+        }
+        .summary-content {
+            margin-top: 20px;
+        }
+        .summary-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+            font-size: 15px;
+            color: #333;
+        }
+        .summary-item strong {
+            color: #555;
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .summary-item span {
+            display: block;
+            font-weight: 400;
+            color: #666;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .button-container a {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            color: #fff;
+            background-color: #7cbb6e;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .button-container a:hover {
+            background-color: #6da55a;
+            transform: translateY(-2px);
+        }
+        .button-container a:active {
+            transform: translateY(1px);
+        }
+        .confirmation-message {
+            display: none;
+            text-align: center;
+            font-size: 36px; /* Taille de police très agrandie */
+            color: #ffffff;
+            margin-top: 40px;
+            padding: 50px; /* Beaucoup d'espace autour du texte */
+            background-color: #5cb85c; /* Vert plus clair */
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .confirmation-message p {
+            margin: 0;
+            font-size: 24px; /* Taille de police très agrandie pour le texte */
+        }
+        .confirmation-message strong {
+            display: block;
+            font-size: 28px; /* Taille de police encore plus grande pour le texte important */
+        }
+    </style>
+</head>
+<body>
+    <!-- Formulaire de demande de devis -->
+    <div class="container form-container">
+        <div class="header">
+            <h1>Demande de Devis</h1>
+            <h2>Chez CollaboraLink</h2>
+        </div>
+        <form id="quote-form">
+            <!-- Nom -->
+            <div class="form-group">
+                <label for="name">Nom <span class="error" id="name-error"></span></label>
+                <input type="text" id="name" name="name" placeholder="Votre nom complet" required>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email <span class="error" id="email-error"></span></label>
+                <input type="email" id="email" name="email" placeholder="Votre adresse email" required>
+            </div>
+
+            <!-- Téléphone -->
+            <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" placeholder="Votre numéro de téléphone">
+            </div>
+
+            <!-- Entreprise -->
+            <div class="form-group">
+                <label for="company">Entreprise (si applicable)</label>
+                <input type="text" id="company" name="company" placeholder="Nom de l'entreprise">
+            </div>
+
+            <!-- Type de service -->
+            <div class="form-group">
+                <label for="service">Type de Service <span class="error" id="service-error"></span></label>
+                <select id="service" name="service" required>
+                    <option value="">Sélectionner le type de service</option>
+                    <option value="Consulting">Consulting</option>
+                    <option value="Développement">Développement</option>
+                    <option value="Formation">Formation</option>
+                </select>
+            </div>
+
+            <!-- Détails du projet -->
+            <div class="form-group">
+                <label for="details">Détails du Projet <span class="error" id="details-error"></span></label>
+                <textarea id="details" name="details" rows="4" placeholder="Décrivez les détails de votre projet" required></textarea>
+            </div>
+
+            <!-- Budget estimé -->
+            <div class="form-group">
+                <label for="budget">Budget Estimé</label>
+                <input type="text" id="budget" name="budget" placeholder="Votre budget estimé">
+            </div>
+
+            <!-- Date souhaitée -->
+            <div class="form-group">
+                <label for="date">Date Souhaitée</label>
+                <input type="date" id="date" name="date">
+            </div>
+
+            <!-- Soumettre le formulaire -->
+            <div class="submit-container">
+                <button type="submit">Prochaine Étape</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Page de récapitulatif de devis -->
+    <div class="container summary-container">
+        <div class="header">
+            <h1>Récapitulatif de votre Devis</h1>
+        </div>
+        <div class="summary-content">
+            <div class="summary-item"><strong>Nom :</strong> <span id="summary-name">John Doe</span></div>
+            <div class="summary-item"><strong>Email :</strong> <span id="summary-email">johndoe@example.com</span></div>
+            <div class="summary-item"><strong>Téléphone :</strong> <span id="summary-phone">0123456789</span></div>
+            <div class="summary-item"><strong>Entreprise :</strong> <span id="summary-company">Exemple S.A.</span></div>
+            <div class="summary-item"><strong>Type de Service :</strong> <span id="summary-service">Consulting</span></div>
+            <div class="summary-item"><strong>Détails du Projet :</strong> <span id="summary-details">Description du projet...</span></div>
+            <div class="summary-item"><strong>Budget Estimé :</strong> <span id="summary-budget">1000€</span></div>
+            <div class="summary-item"><strong>Date Souhaitée :</strong> <span id="summary-date">2024-12-31</span></div>
+        </div>
+        <div class="button-container">
+            <a href="#" id="edit-button">Modifier la Demande</a>
+            <a href="#" id="confirm-button">Confirmer la Demande</a>
+        </div>
+    </div>
+
+    <!-- Message de confirmation -->
+    <div class="confirmation-message" id="confirmation-message">
+        <p><strong>Votre demande de devis a été confirmée avec succès.</strong></p>
+        <p>Un conseiller prendra contact avec vous dans moins de 24 heures.</p>
+    </div>
+
+    <script>
+        document.getElementById('quote-form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Pour la démonstration
+
+            // Masquer le formulaire et afficher le récapitulatif
+            document.querySelector('.form-container').style.display = 'none';
+            document.querySelector('.summary-container').style.display = 'block';
+
+            // Remplir le récapitulatif avec les données du formulaire
+            document.getElementById('summary-name').textContent = document.getElementById('name').value;
+            document.getElementById('summary-email').textContent = document.getElementById('email').value;
+            document.getElementById('summary-phone').textContent = document.getElementById('phone').value || 'Non renseigné';
+            document.getElementById('summary-company').textContent = document.getElementById('company').value || 'Non renseigné';
+            document.getElementById('summary-service').textContent = document.getElementById('service').value || 'Non renseigné';
+            document.getElementById('summary-details').textContent = document.getElementById('details').value;
+            document.getElementById('summary-budget').textContent = document.getElementById('budget').value || 'Non renseigné';
+            document.getElementById('summary-date').textContent = document.getElementById('date').value || 'Non renseigné';
+        });
+
+        document.getElementById('confirm-button').addEventListener('click', function(event) {
+            event.preventDefault();
+            // Masquer le récapitulatif et afficher le message de confirmation
+            document.querySelector('.summary-container').style.display = 'none';
+            document.getElementById('confirmation-message').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
